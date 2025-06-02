@@ -45,12 +45,30 @@ L = R_o - R_i;
 % u = RPM *2*pi/60
 
 
-% select an RPM
-RPM = 0.021;
+% select an RPS (at the motor). Define positive to be CCW
+RPS_SmallMotor = 3;
+RPS_LargeMotor = 3;
 
-u = RPM * 2*pi/60;
+% Inner Cylinder and Outer Cylinder Have Different Re because they have
+% different rotation rates. Also need to factor in slight mechanical
+% advantage due to gears.
 
-Re = (rho * u * L) / mu ;
+% mechanical advantage of the inner cylinder. This is the tooth ratio of
+% the source (motor gear) to the target (axle of cylinder gear).
+
+MechAdvInner = 16 / 24;
+MechAdvOuter = 18 / 23;
+
+
+% at the actual cylinder.
+uInner = MechAdvInner*RPS_SmallMotor * 2*pi;
+uOuter = MechAdvOuter*RPS_LargeMotor * 2*pi;
+
+Re_Inner = (rho * uInner * L) / mu ;
+Re_Outer = (rho * uOuter * L) / mu ;
+
+Coefficient_Inner = rho*L*MechAdvInner/mu;
+Coefficient_Outer = rho*L*MechAdvOuter/mu;
 
 
 
